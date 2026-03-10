@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+     th:replace="~{layout}">
+
+<body>
+
+<section th:fragment="content">
+
+<div class="container-fluid">
+
+<h2 class="mb-4">Dashboard</h2>
+
+<div class="row">
+
+<div class="col-md-4">
+<div class="card shadow p-3 bg-primary text-white">
+<h5>Total Students</h5>
+<h2 th:text="${studentCount} ?: 0">0</h2>
+</div>
+</div>
+
+<div class="col-md-4">
+<div class="card shadow p-3 bg-success text-white">
+<h5>Total Companies</h5>
+<h2 th:text="${companyCount} ?: 0">0</h2>
+</div>
+</div>
+
+<div class="col-md-4">
+<div class="card shadow p-3 bg-warning text-dark text-center">
+<h5>Students Placed</h5>
+<h2 th:text="${placedCount}">0</h2>
+</div>
+</div>
+
+</div>
+
+<div class="row mt-5">
+
+<div class="col-md-6">
+
+<h4>Placement Statistics</h4>
+
+<canvas id="placementChart"></canvas>
+
+</div>
+</div>
+
+<h4 class="mt-5">Recent Placements</h4>
+<table class="table table-bordered">
+<thead class="table-dark">
+<tr>
+     <th>Name</th>
+     <th>Email</th>
+     <th>Company</th>
+</tr>
+</thead>
+
+<tbody>
+     <tr th:each="student : ${recentPlacements}">
+     <td th:text="${student.name}"></td>
+     <td th:text="${student.email}"></td>
+     <td th:text="${student.company.name}"></td>
+
+     </tr>
+</tbody>
+</table>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script th:inline="javascript">
+
+window.onload = function(){
+
+var placed = /*[[${placedCount}]]*/ 0;
+var notPlaced = /*[[${notPlacedCount}]]*/ 0;
+
+var ctx = document.getElementById('placementChart').getContext('2d');
+
+new Chart(ctx, {
+type: 'pie',
+data: {
+labels: ['Placed','Not Placed'],
+datasets: [{
+data: [placed, notPlaced],
+backgroundColor: ['#28a745','#dc3545']
+}]
+}
+});
+
+};
+
+</script>
+
+</section>
+</body>
+</html>
